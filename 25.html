@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giải thích Hàm Python Trực Quan</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background-color: #f3f4f6; 
+        }
+        
+        /* Code Editor Style (VS Code Dark Theme Inspired) */
+        .editor { 
+            background-color: #1e1e1e; 
+            color: #d4d4d4; 
+            font-family: 'Consolas', 'Courier New', monospace; 
+            border-radius: 12px; 
+            padding: 24px; 
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); 
+            line-height: 1.7; 
+            font-size: 15px; 
+            overflow-x: auto; 
+        }
+        
+        /* Syntax Highlighting */
+        .keyword { color: #c586c0; } /* Python keywords */
+        .string { color: #ce9178; } /* Strings */
+        .comment { color: #6a9955; } /* Comments */
+        .variable { color: #9cdcfe; }
+
+        /* Interactive Elements styling */
+        .interactive {
+            position: relative;
+            color: #dcdcaa; /* Typical Function color */
+            font-weight: bold;
+            cursor: pointer;
+            border-bottom: 2px dashed #dcdcaa;
+            transition: all 0.2s ease;
+            display: inline-block;
+        }
+        
+        .interactive:hover, .interactive.active {
+            background-color: rgba(220, 220, 170, 0.2);
+            border-radius: 4px;
+        }
+
+        .operator-interactive {
+            color: #569cd6;
+            border-bottom: 2px dashed #569cd6;
+        }
+        
+        .operator-interactive:hover, .operator-interactive.active {
+            background-color: rgba(86, 156, 214, 0.2);
+        }
+
+        /* Floating Tooltip Box */
+        #tooltip {
+            position: absolute;
+            width: 320px;
+            background-color: #2563eb;
+            color: white;
+            padding: 16px;
+            border-radius: 10px;
+            font-size: 14px;
+            line-height: 1.5;
+            box-shadow: 0 10px 25px rgba(37, 99, 235, 0.4);
+            pointer-events: none; /* So it doesn't block clicks */
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity 0.25s ease, transform 0.25s ease;
+            z-index: 1000;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        #tooltip.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* CSS Arrow pointing DOWN */
+        #tooltip::after {
+            content: '';
+            position: absolute;
+            top: 100%; /* Arrow at the bottom */
+            left: 50%;
+            margin-left: -10px;
+            border-width: 10px;
+            border-style: solid;
+            border-color: #2563eb transparent transparent transparent;
+        }
+
+        /* CSS Arrow pointing UP (when tooltip is below the text) */
+        #tooltip.bottom-placement::after {
+            top: -20px;
+            border-color: transparent transparent #2563eb transparent;
+        }
+
+        /* Dot decoration inside the window */
+        .window-controls {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+        .control-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+        .dot-red { background-color: #ff5f56; }
+        .dot-yellow { background-color: #ffbd2e; }
+        .dot-green { background-color: #27c93f; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center py-10 px-4 md:px-8">
+
+    <div class="max-w-4xl w-full">
+        <h1 class="text-3xl font-bold text-gray-800 mb-3 text-center">Sơ đồ Tương tác Hàm Python</h1>
+        <p class="text-gray-600 text-center mb-8 text-lg">
+            Hãy <strong class="text-blue-600">bấm vào các lệnh có nét đứt</strong> trong đoạn code dưới đây để xem giải thích (kèm mũi tên chỉ dẫn).
+        </p>
+
+        <!-- Mockup of a Code Editor -->
+        <div class="editor relative mb-8">
+            <div class="window-controls">
+                <div class="control-dot dot-red"></div>
+                <div class="control-dot dot-yellow"></div>
+                <div class="control-dot dot-green"></div>
+            </div>
+            
+            <span class="comment"># Chương trình xử lý văn bản tổng hợp Bài 25</span><br>
+            <span class="variable">van_ban</span> = <span class="interactive" data-key="input">input</span>(<span class="string">'Nhập một câu: '</span>)<br>
+            <br>
+            <span class="keyword">if</span> <span class="string">'lỗi'</span> <span class="interactive operator-interactive" data-key="in">in</span> <span class="variable">van_ban</span>:<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;<span class="variable">vt</span> = <span class="variable">van_ban</span>.<span class="interactive" data-key="find">find</span>(<span class="string">'lỗi'</span>)<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;<span class="interactive" data-key="print">print</span>(<span class="string">'Cảnh báo: Tìm thấy chữ lỗi ở vị trí '</span> + <span class="interactive" data-key="str">str</span>(<span class="variable">vt</span>))<br>
+            <br>
+            <span class="variable">danh_sach_tu</span> = <span class="variable">van_ban</span>.<span class="interactive" data-key="split">split</span>()<br>
+            <span class="variable">so_luong_tu</span> = <span class="interactive" data-key="len">len</span>(<span class="variable">danh_sach_tu</span>)<br>
+            <br>
+            <span class="variable">tu_hop_le</span> = []<br>
+            <span class="keyword">for</span> <span class="variable">tu</span> <span class="keyword">in</span> <span class="variable">danh_sach_tu</span>: <span class="comment"># Duyệt từng từ trong danh sách</span><br>
+            &nbsp;&nbsp;&nbsp;&nbsp;<span class="variable">tu_hop_le</span>.<span class="interactive" data-key="append">append</span>(<span class="variable">tu</span>)<br>
+            <br>
+            <span class="variable">cau_hoan_chinh</span> = <span class="string">' '</span>.<span class="interactive" data-key="join">join</span>(<span class="variable">tu_hop_le</span>)<br>
+            <span class="interactive" data-key="print">print</span>(<span class="string">'Kết quả: '</span> + <span class="variable">cau_hoan_chinh</span>)<br>
+        </div>
+
+        <!-- Static Box showing explanation as fallback -->
+        <div id="instruction-box" class="bg-blue-50 border-2 border-blue-200 rounded-xl p-6 text-blue-800 shadow-sm text-center transition-all duration-300">
+            <svg class="w-8 h-8 mx-auto mb-2 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"></path></svg>
+            <p class="font-medium text-lg">Bấm vào một hàm/lệnh ở đoạn code phía trên để hiển thị hộp giải thích chi tiết.</p>
+        </div>
+    </div>
+
+    <!-- The actual floating tooltip -->
+    <div id="tooltip">Nội dung giải thích sẽ nằm ở đây...</div>
+
+    <script>
+        // Nội dung giải thích được chuẩn bị sẵn
+        const explanations = {
+            'input': '<strong class="text-xl block mb-2 text-yellow-300">input()</strong> Dừng chương trình chờ người dùng nhập dữ liệu từ bàn phím. Dữ liệu nhận được luôn mặc định ở dạng chuỗi văn bản (string).',
+            'in': '<strong class="text-xl block mb-2 text-yellow-300">Toán tử "in"</strong> Kiểm tra xem một xâu con có nằm lọt trong một xâu mẹ hay không. Nó sẽ trả lời Đúng (True) hoặc Sai (False).',
+            'find': '<strong class="text-xl block mb-2 text-yellow-300">.find()</strong> Cỗ máy dò tìm. Quét và trả về con số vị trí (index) đầu tiên của xâu con cần tìm. Nếu không tìm thấy sẽ trả về -1.',
+            'print': '<strong class="text-xl block mb-2 text-yellow-300">print()</strong> Lệnh in dữ liệu, thông báo hoặc kết quả tính toán ra màn hình console để người dùng quan sát.',
+            'str': '<strong class="text-xl block mb-2 text-yellow-300">str()</strong> Hàm ép kiểu. Giúp chuyển đổi một số (như số đếm vt) thành dạng chữ, để máy tính có thể cộng nối đoạn văn bản lại với nhau.',
+            'split': '<strong class="text-xl block mb-2 text-yellow-300">.split()</strong> Chiếc kéo cắt chuỗi. Cắt một chuỗi dài thành một danh sách (List) gồm nhiều đoạn nhỏ. Mặc định nó cắt theo dấu khoảng trắng.',
+            'len': '<strong class="text-xl block mb-2 text-yellow-300">len()</strong> Cây thước đo. Dùng để đếm xem có bao nhiêu phần tử trong một danh sách, hoặc có bao nhiêu kí tự trong một chuỗi.',
+            'append': '<strong class="text-xl block mb-2 text-yellow-300">.append()</strong> Hành động nhét thêm một phần tử mới vào tận cùng của một danh sách (List) đang có.',
+            'join': '<strong class="text-xl block mb-2 text-yellow-300">.join()</strong> Tuýp keo dán. Gom các phần tử rời rạc của danh sách dán lại thành một chuỗi duy nhất, lấy kí tự phía trước làm chất kết dính.'
+        };
+
+        const interactives = document.querySelectorAll('.interactive');
+        const tooltip = document.getElementById('tooltip');
+        const instructionBox = document.getElementById('instruction-box');
+
+        let activeElement = null;
+
+        // Xử lý sự kiện click
+        interactives.forEach(el => {
+            el.addEventListener('click', (e) => {
+                // Ngăn chặn việc click lan ra ngoài body (giúp tooltip ko bị ẩn ngay)
+                e.stopPropagation();
+
+                // Xóa trạng thái active của từ cũ
+                interactives.forEach(i => i.classList.remove('active'));
+
+                // Thêm trạng thái active (bôi sáng) cho từ đang click
+                el.classList.add('active');
+                activeElement = el;
+
+                // Lấy khóa dữ liệu và text
+                const key = el.getAttribute('data-key');
+                const text = explanations[key];
+
+                // Hiển thị nội dung vào hộp thông báo tĩnh phía dưới (chức năng phụ)
+                instructionBox.innerHTML = `<div class="text-left">${text.replace('text-yellow-300', 'text-blue-800')}</div>`;
+                instructionBox.classList.remove('bg-blue-50', 'text-blue-800', 'border-blue-200');
+                instructionBox.classList.add('bg-white', 'text-gray-800', 'border-gray-200');
+
+                // Hiển thị nội dung vào tooltip trôi nổi
+                tooltip.innerHTML = text;
+                tooltip.classList.add('show');
+
+                // Tính toán vị trí hiển thị (Tọa độ)
+                const rect = el.getBoundingClientRect();
+                const tooltipRect = tooltip.getBoundingClientRect();
+
+                // Đặt mặc định tooltip nằm phía TRÊN (TOP) của từ được click
+                let top = rect.top + window.scrollY - tooltipRect.height - 15;
+                let left = rect.left + window.scrollX + (rect.width / 2) - (tooltipRect.width / 2);
+
+                // Nếu căn giữa làm tooltip vượt quá mép màn hình thì phải thụt lại
+                if (left < 10) left = 10;
+                if (left + tooltipRect.width > window.innerWidth - 10) {
+                    left = window.innerWidth - tooltipRect.width - 10;
+                }
+
+                // Nếu cạnh trên cùng không đủ chỗ trống thì chuyển tooltip xuống phía DƯỚI (BOTTOM)
+                tooltip.classList.remove('bottom-placement');
+                if (top < window.scrollY + 10) {
+                    top = rect.bottom + window.scrollY + 15;
+                    tooltip.classList.add('bottom-placement'); // Đổi mũi tên chỉ lên
+                }
+
+                // Áp dụng tọa độ
+                tooltip.style.top = `${top}px`;
+                tooltip.style.left = `${left}px`;
+            });
+        });
+
+        // Tắt tooltip khi bấm ra ngoài khoảng trống
+        document.addEventListener('click', () => {
+            tooltip.classList.remove('show');
+            if (activeElement) {
+                activeElement.classList.remove('active');
+                activeElement = null;
+            }
+        });
+
+        // Tự động căn chỉnh lại tọa độ khi người dùng thu phóng cửa sổ màn hình
+        window.addEventListener('resize', () => {
+            if (activeElement && tooltip.classList.contains('show')) {
+                activeElement.click(); // Gọi lại click để tính toán lại tọa độ
+            }
+        });
+    </script>
+</body>
+</html>
